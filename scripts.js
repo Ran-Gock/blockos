@@ -257,20 +257,21 @@ function getPositionAtCenter(element) {
       x: left + width / 2,
       y: top + height / 2
     };
-  }
+}
  
  function getDistanceBetweenElements(a, b) {
    const aPosition = getPositionAtCenter(a);
    const bPosition = getPositionAtCenter(b);
  
    return Math.hypot(aPosition.x - bPosition.x, aPosition.y - bPosition.y);  
- }
+}
+
 
 player.style.top = document.querySelector('.action').getBoundingClientRect().height*0.8 + 'px';
 player.style.left = document.querySelector('.action').getBoundingClientRect().width*0.5 - 50 + 'px';
-document.querySelector('.head img').addEventListener('click', (evt) => {
+document.querySelector('.head img').addEventListener('click', async (evt) => {
     commands = [];
-    
+
     let blocksWithPositions = blocks.map(block => {
         return {
             block: block,
@@ -284,95 +285,92 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
         commands.push(blockWithPos.block);
     });
 
-    isStart = false
-    isStop = false
-    commands.forEach((com) => {
-        if(isStart && !isStop) {
-            sleep(400);
-            if(com.classList.contains('menu-rot-right')) {
-                if(player.classList.contains('player-up'))
-                    player.classList.toggle('player-up');
-                if(player.classList.contains('player-left'))
-                    player.classList.toggle('player-left');
-                if(player.classList.contains('player-down'))
-                    player.classList.toggle('player-down');
+    isStart = false;
+    isStop = false;
 
-                if(!player.classList.contains('player-right'))
-                    player.classList.toggle('player-right');
-            }
-            else if(com.classList.contains('menu-rot-left')) {
-                if(player.classList.contains('player-up'))
-                    player.classList.toggle('player-up');
-                if(player.classList.contains('player-right'))
-                    player.classList.toggle('player-right');
-                if(player.classList.contains('player-down'))
-                    player.classList.toggle('player-down');
-
-                if(!player.classList.contains('player-left'))
-                    player.classList.toggle('player-left');
-            }
-            else if(com.classList.contains('menu-rot-up')) {
-                if(player.classList.contains('player-right'))
-                    player.classList.toggle('player-right');
-                if(player.classList.contains('player-left'))
-                    player.classList.toggle('player-left');
-                if(player.classList.contains('player-down'))
-                    player.classList.toggle('player-down');
-
-                if(!player.classList.contains('player-up'))
-                    player.classList.toggle('player-up');
-            }
-            else if(com.classList.contains('menu-rot-down')) {
-                if(player.classList.contains('player-up'))
-                    player.classList.toggle('player-up');
-                if(player.classList.contains('player-left'))
-                    player.classList.toggle('player-left');
-                if(player.classList.contains('player-right'))
-                    player.classList.toggle('player-right');
-
-                if(!player.classList.contains('player-down'))
-                    player.classList.toggle('player-down');
-            }
-            else if(com.classList.contains('menu-en')) {
-                isStop=true;
+    for (const com of commands) {
+        if (isStart && !isStop) {
+            await sleep(400);
+            if (com.classList.contains('menu-rot-right')) {
+                setPlayerDirection('player-right');
+                console.log('right');
+            } else if (com.classList.contains('menu-rot-left')) {
+                setPlayerDirection('player-left');
+                console.log('left');
+            } else if (com.classList.contains('menu-rot-up')) {
+                setPlayerDirection('player-up');
+                console.log('up');
+            } else if (com.classList.contains('menu-rot-down')) {
+                setPlayerDirection('player-down');
+                console.log('down');
+            } else if (com.classList.contains('menu-en')) {
+                isStop = true;
+                console.log('end');
                 audio.pause();
-                audio,currentTime = 0;
-            }
-            else if(com.classList.contains('menu-mu')) {
+                audio.currentTime = 0;
+            } else if (com.classList.contains('menu-mu')) {
                 audio.play();
+                console.log('audio');
+            } else if (com.classList.contains('menu-mo')) {
+                movePlayerToInputValue(com, player);
+                console.log('move');
             }
-            else if(com.classList.contains('menu-mo')) {
-                let its = null;
-                document.querySelectorAll('input').forEach((inp, ind) => {
-                    if(ind!=0){
-                        if(getDistanceBetweenElements(com, inp) < getDistanceBetweenElements(com, its)) {
-                            its = inp;
-                        }
-                    }
-                    else {
-                        its = inp;
-                    }
-                });
-                if(its.value!=null) { 
-                    if(player.classList.contains('player-down'))
-                        player.style.transform = player.style.transform +' translateY('+Math.min(165, Math.max(parseInt(its.value), -350))+'px)';
-                    if(player.classList.contains('player-up'))
-                        player.style.transform = player.style.transform +' translateY('+Math.max(Math.min(-parseInt(its.value), 165), -350)+'px)';
-                    if(player.classList.contains('player-left'))
-                        player.style.transform = player.style.transform +' translateX('+Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, -parseInt(its.value)))+'px)';
-                    if(player.classList.contains('player-right')) {
-                        console.log(player.style.transform)
-                        player.style.transform = player.style.transform +' translateX('+Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), parseInt(its.value)))+'px)';
-                        console.log(player.style.transform) }
+        } else if (com.classList.contains('menu-st')) {
+            isStart = true;
+            player.style.top = document.querySelector('.action').getBoundingClientRect().height * 0.8 + 'px';
+            player.style.left = document.querySelector('.action').getBoundingClientRect().width * 0.5 - 50 + 'px';
+            player.style.transform = '';
+            console.log('start');
+        }
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function setPlayerDirection(direction) {
+        const directions = ['player-up', 'player-left', 'player-down', 'player-right'];
+        directions.forEach(dir => {
+            if (dir === direction) {
+                if (!player.classList.contains(dir)) {
+                    player.classList.add(dir);
+                }
+            } else {
+                if (player.classList.contains(dir)) {
+                    player.classList.remove(dir);
                 }
             }
+        });
+    }
+
+    function movePlayerToInputValue(com, player) {
+        let its = null;
+        document.querySelectorAll('input').forEach((inp, ind) => {
+            if (ind != 0) {
+                if (getDistanceBetweenElements(com, inp) < getDistanceBetweenElements(com, its)) {
+                    its = inp;
+                }
+            } else {
+                its = inp;
+            }
+        });
+        if (its.value != null) {
+            if (player.classList.contains('player-down'))
+                player.style.transform = player.style.transform + ' translateY(' + Math.min(165, Math.max(parseInt(its.value), -350)) + 'px)';
+            if (player.classList.contains('player-up'))
+                player.style.transform = player.style.transform + ' translateY(' + Math.max(Math.min(-parseInt(its.value), 165), -350) + 'px)';
+            console.log(-parseInt(its.value));
+            if (player.classList.contains('player-left'))
+                player.style.transform = player.style.transform + ' translateX(' + Math.max(0 - (document.querySelector('.action').getBoundingClientRect().width * 0.5 - 50), Math.min(document.querySelector('.action').getBoundingClientRect().width * 0.5 - 30, -parseInt(its.value))) + 'px)';
+            if (player.classList.contains('player-right'))
+                player.style.transform = player.style.transform + ' translateX(' + Math.min(document.querySelector('.action').getBoundingClientRect().width * 0.5 - 30, Math.max(0 - (document.querySelector('.action').getBoundingClientRect().width * 0.5 - 50), parseInt(its.value))) + 'px)';
         }
-        else if(com.classList.contains('menu-st')) {
-            isStart = true;
-            player.style.top = document.querySelector('.action').getBoundingClientRect().height*0.8 + 'px';
-            player.style.left = document.querySelector('.action').getBoundingClientRect().width*0.5 - 50 + 'px';
-            player.style.transform = ''
-        }
-        
-    });
+    }
+
+    function getDistanceBetweenElements(elem1, elem2) {
+        if (!elem1 || !elem2) return Infinity;
+        const rect1 = elem1.getBoundingClientRect();
+        const rect2 = elem2.getBoundingClientRect();
+        return Math.sqrt(Math.pow(rect2.left - rect1.left, 2) + Math.pow(rect2.top - rect1.top, 2));
+    }
 });
