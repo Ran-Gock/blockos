@@ -223,7 +223,6 @@ menuBlocks.forEach((block) => {
                         let parent = currentBlock;
                         blocks.push(currentBlock);
                         setInterval(() => {
-                            console.log(!blocks.includes(parent))
                             if(!blocks.includes(parent)) {
                                 input.remove();
                             }
@@ -300,7 +299,6 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
 
                 if(!player.classList.contains('player-right'))
                     player.classList.toggle('player-right');
-                console.log('right');
             }
             else if(com.classList.contains('menu-rot-left')) {
                 if(player.classList.contains('player-up'))
@@ -312,7 +310,6 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
 
                 if(!player.classList.contains('player-left'))
                     player.classList.toggle('player-left');
-                console.log('left');
             }
             else if(com.classList.contains('menu-rot-up')) {
                 if(player.classList.contains('player-right'))
@@ -324,7 +321,6 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
 
                 if(!player.classList.contains('player-up'))
                     player.classList.toggle('player-up');
-                console.log('up');
             }
             else if(com.classList.contains('menu-rot-down')) {
                 if(player.classList.contains('player-up'))
@@ -336,17 +332,14 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
 
                 if(!player.classList.contains('player-down'))
                     player.classList.toggle('player-down');
-                console.log('down');
             }
             else if(com.classList.contains('menu-en')) {
                 isStop=true;
-                console.log('end');
                 audio.pause();
                 audio,currentTime = 0;
             }
             else if(com.classList.contains('menu-mu')) {
                 audio.play();
-                console.log('audio');
             }
             else if(com.classList.contains('menu-mo')) {
                 let its = null;
@@ -371,7 +364,6 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
                     if(player.classList.contains('player-right'))
                         player.style.transform = player.style.transform +' translateX('+Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), parseInt(its.value)))+'px)';
                 }
-                console.log('move');
             }
         }
         else if(com.classList.contains('menu-st')) {
@@ -379,7 +371,6 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
             player.style.top = document.querySelector('.action').getBoundingClientRect().height*0.8 + 'px';
             player.style.left = document.querySelector('.action').getBoundingClientRect().width*0.5 - 50 + 'px';
             player.style.transform = ''
-            console.log('start');
         }
         
     });
