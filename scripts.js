@@ -362,7 +362,9 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
                     if(player.classList.contains('player-left'))
                         player.style.transform = player.style.transform +' translateX('+Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, -parseInt(its.value)))+'px)';
                     if(player.classList.contains('player-right'))
+                        console.log(player.style.transform)
                         player.style.transform = player.style.transform +' translateX('+Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), parseInt(its.value)))+'px)';
+                        console.log(player.style.transform)
                 }
             }
         }
