@@ -358,13 +358,12 @@ document.querySelector('.head img').addEventListener('click', (evt) => {
                         player.style.transform = player.style.transform +' translateY('+Math.min(165, Math.max(parseInt(its.value), -350))+'px)';
                     if(player.classList.contains('player-up'))
                         player.style.transform = player.style.transform +' translateY('+Math.max(Math.min(-parseInt(its.value), 165), -350)+'px)';
-                    console.log(-parseInt(its.value))
                     if(player.classList.contains('player-left'))
                         player.style.transform = player.style.transform +' translateX('+Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, -parseInt(its.value)))+'px)';
-                    if(player.classList.contains('player-right'))
+                    if(player.classList.contains('player-right')) {
                         console.log(player.style.transform)
                         player.style.transform = player.style.transform +' translateX('+Math.min(document.querySelector('.action').getBoundingClientRect().width*0.5-30, Math.max(0-(document.querySelector('.action').getBoundingClientRect().width*0.5-50), parseInt(its.value)))+'px)';
-                        console.log(player.style.transform)
+                        console.log(player.style.transform) }
                 }
             }
         }
