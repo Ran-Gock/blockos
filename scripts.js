@@ -223,8 +223,14 @@ menuBlocks.forEach((block) => {
                         let parent = currentBlock;
                         blocks.push(currentBlock);
                         setInterval(() => {
-                            input.style.left = `${parent.getBoundingClientRect().x+(376/3)}px`;
-                            input.style.top = `${parent.getBoundingClientRect().y+10}px`;
+                            console.log(!blocks.includes(parent))
+                            if(!blocks.includes(parent)) {
+                                input.remove();
+                            }
+                            else {
+                                input.style.left = `${parent.getBoundingClientRect().x+(376/3)}px`;
+                                input.style.top = `${parent.getBoundingClientRect().y+10}px`;
+                            }
                         }, 1);
                     });
                 }   
